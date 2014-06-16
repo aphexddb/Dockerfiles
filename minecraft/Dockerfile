@@ -1,6 +1,6 @@
 FROM ubuntu
 
-RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
+RUN sed -i 's/universe/universe multiverse/' /etc/apt/sources.list
 RUN apt-get update
 RUN apt-get dist-upgrade -y
 

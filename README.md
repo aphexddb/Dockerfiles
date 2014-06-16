@@ -1,10 +1,6 @@
 # Dockerfiles
 
-## Utility commands
-
-Nuke all images ran or running:
-
-    docker stop $(docker ps -a -q) ; docker rm $(docker ps -a -q)
+Some Docker files I find handy. Where possible, all are built using the [http://phusion.github.io/baseimage-docker/](Phusion baseimage-docker) pattern.
 
 ## Minecraft server with overviewer
 
@@ -23,3 +19,27 @@ Run the server!
 Schedule overview builds every hour
 
     @hourly docker run -volumes-from $MINECRAFT -volumes-from $MAPSERVER mapgenerator
+
+## Redis server
+
+Build image (if local)
+
+    docker build -t redis ./redis
+
+Run the server!  
+
+    REDIS=$(docker run -d -p 6379:6379 --name=redis redis)
+
+Run the same server as a client!
+
+    docker run -it --name=redis_client --link redis:redis --rm redis /bin/bash -c 'exec redis-cli -h "$REDIS_PORT_6379_TCP_ADDR" -p "$REDIS_PORT_6379_TCP_PORT"'
+
+## Utility commands
+
+Nuke all images ran or running:
+
+    docker stop $(docker ps -a -q) ; docker rm $(docker ps -a -q)
+
+Run a container with a bash shell
+
+    docker run -i -t redis:latest /bin/bash
